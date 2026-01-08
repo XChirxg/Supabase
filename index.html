@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Supabase Test</title>
+</head>
+<body>
+  <h2>Supabase Basic Test</h2>
+
+  <input id="msg" placeholder="Type a message" />
+  <button onclick="sendMessage()">Send</button>
+
+  <ul id="list"></ul>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const supabase = createClient(
+    "YOUR_SUPABASE_URL",
+    "YOUR_PUBLIC_ANON_KEY"
+  );
+
+  // Auto login anonymously
+  await supabase.auth.signInAnonymously();
+
+  async function loadMessages() {
+    const { data } = await supabase
+      .from("messages")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    data.forEach(m => {
+      const li = document.createElement("li");
+      li.textContent = m.text;
+      list.appendChild(li);
+    });
+  }
+
+  window.sendMessage = async () => {
+    const text = document.getElementById("msg").value;
+    const user = (await supabase.auth.getUser()).data.user;
+
+    await supabase.from("messages").insert({
+      text,
+      user_id: user.id
+    });
+
+    document.getElementById("msg").value = "";
+    loadMessages();
+  };
+
+  loadMessages();
+</script>
+</body>
+</html>
