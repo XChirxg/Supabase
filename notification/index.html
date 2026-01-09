@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>FCM Test Panel</title>
+</head>
+<body>
+  <h2>Send Push Notification (Test)</h2>
+
+  <input id="token" placeholder="FCM Token" style="width: 400px;"><br><br>
+  <input id="title" placeholder="Notification Title"><br><br>
+  <textarea id="body" placeholder="Notification Body"></textarea><br><br>
+
+  <button onclick="send()">Send Notification</button>
+
+  <pre id="result"></pre>
+
+  <script>
+    async function send() {
+      const token = document.getElementById("token").value;
+      const title = document.getElementById("title").value;
+      const body = document.getElementById("body").value;
+
+      const res = await fetch(
+        "https://YOUR_PROJECT_ID.supabase.co/functions/v1/send-push",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_SUPABASE_ANON_KEY"
+          },
+          body: JSON.stringify({ token, title, body })
+        }
+      );
+
+      document.getElementById("result").textContent =
+        JSON.stringify(await res.json(), null, 2);
+    }
+  </script>
+</body>
+</html>
