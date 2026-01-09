@@ -4,7 +4,7 @@ This app was created as a **learning project** to understand how the **Firebase 
 
 After installing the app, you can view the app’s **FCM token directly on your device**. Using this token, you can visit:
 
-🔗 **https://xchirxg.web.app/Supabase/notification**
+🔗 **https://xchirxg.github.io/Supabase/notification**
 
 From there, you can send push notifications to the app using the FCM token.
 
